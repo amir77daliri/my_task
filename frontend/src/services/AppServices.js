@@ -1,11 +1,10 @@
 import axios from "axios"
 
-const SERVER_URL = "http://localhost:8000/api";
+const SERVER_URL = "http://localhost:8000/api/create-currency/";
 
 class Services {
     createCurrency = (data) => {
-        const url = `${SERVER_URL}/create-currency/`
-        return axios.post(url, data)
+        return axios.post(SERVER_URL, data)
     }
 }
 
