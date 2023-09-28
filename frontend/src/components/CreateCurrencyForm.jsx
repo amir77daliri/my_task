@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import {TextField, Button} from '@mui/material';
+import AppService from '../services/AppServices'
+ import {toast} from 'react-toastify'
+
 
 const CreateCurrencyForm = () => {
     const [formData, setFormData] = useState({
@@ -14,9 +17,20 @@ const CreateCurrencyForm = () => {
             [e.target.name]: e.target.value
         })
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
+        try {
+            const {data, status} = await AppService.createCurrency(formData)
+            console.log("data is: ",data)
+            if(status === 201) {
+                toast.success("ارز شما با موفقیت ساخته شد")
+            }else {
+                toast.error("خطا در ثبت اطلاعات ! مجددا تلاش کنید")
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
     };
 
     return (

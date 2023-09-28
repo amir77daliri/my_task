@@ -8,6 +8,7 @@ import TabPanel from "./components/tabs/TabPanel";
 import CurrencyTable from "./components/CurrencyTable";
 import CurrencyModal from "./components/CurrencyModal";
 
+import {ToastContainer} from "react-toastify";
 
 function App() {
     const [value, setValue] = useState(0)
@@ -25,6 +26,7 @@ function App() {
 
     return (
         <MainLayout>
+            <ToastContainer rtl={true} position="top-right" theme="colored" />
             <Sidebar value={value} handleChange={handleChangePage}/>
             <ContentContainer>
                 <TabPanel value={value} index={0} >
