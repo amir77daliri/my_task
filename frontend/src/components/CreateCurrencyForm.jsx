@@ -28,8 +28,7 @@ const CreateCurrencyForm = ({handleModalClose}) => {
 
                 toast.success("ارز شما با موفقیت ساخته شد")
             }else {
-
-                toast.error("خطا در ثبت اطلاعات ! مجددا تلاش کنید")
+                toast.error(`ارز با نام ${data.msg} در پایگاه داده موجود است! `)
             }
         }
         catch (err) {

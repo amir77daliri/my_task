@@ -24,5 +24,5 @@ class CreateCurrency(APIView):
                 content=obj_data.validated_data['content']
             )
         except Exception as e:
-            return Response({'msg': 'something goes wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'msg': 'ارز مورد نظر در پایگاه داده موجود است!'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'msg': 'ok!'}, status=status.HTTP_201_CREATED)
