@@ -26,7 +26,7 @@ function App() {
 
     return (
         <MainLayout>
-            <ToastContainer rtl={true} position="top-right" theme="colored" />
+            <ToastContainer rtl={true} position="bottom-right" theme="colored" />
             <Sidebar value={value} handleChange={handleChangePage}/>
             <ContentContainer>
                 <TabPanel value={value} index={0} >
@@ -37,6 +37,7 @@ function App() {
                 </TabPanel>
             </ContentContainer>
         </MainLayout>
+
     );
 }
 

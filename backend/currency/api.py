@@ -10,19 +10,19 @@ class CreateCurrency(APIView):
         API View to Create currency -- data come from react app
     """
     class InputSerializer(serializers.Serializer):
-        name = serializers.CharField(max_length=100)
+        currency_name = serializers.CharField(max_length=100)
         content = serializers.CharField(max_length=10000)
-        email = serializers.EmailField()
+        author_email = serializers.EmailField()
 
     def post(self, request):
         obj_data = self.InputSerializer(data=request.data)
         obj_data.is_valid(raise_exception=True)
         try:
             Currency.objects.create(
-                name=obj_data.validated_data['name'],
-                author_email=obj_data.validated_data['email'],
+                name=obj_data.validated_data['currency_name'],
+                author_email=obj_data.validated_data['author_email'],
                 content=obj_data.validated_data['content']
             )
         except Exception as e:
             return Response({'msg': 'something goes wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response({'msg': 'ok!'}, status=status.HTTP_200_OK)
+        return Response({'msg': 'ok!'}, status=status.HTTP_201_CREATED)

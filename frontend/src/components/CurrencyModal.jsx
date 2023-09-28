@@ -27,7 +27,7 @@ const CurrencyModal = ({open, handleModalClose, handleModalOpen}) => {
                         ساخت ارز جدید
                     </Typography>
                 </div>
-                <CreateCurrencyForm />
+                <CreateCurrencyForm handleModalClose={handleModalClose}/>
             </Box>
         </StyledModal>
       </div>

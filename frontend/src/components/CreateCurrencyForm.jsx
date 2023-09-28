@@ -4,10 +4,10 @@ import AppService from '../services/AppServices'
  import {toast} from 'react-toastify'
 
 
-const CreateCurrencyForm = () => {
+const CreateCurrencyForm = ({handleModalClose}) => {
     const [formData, setFormData] = useState({
         currency_name: "",
-        creator_email: "",
+        author_email: "",
         content: ""
     })
 
@@ -19,12 +19,16 @@ const CreateCurrencyForm = () => {
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(formData)
         try {
             const {data, status} = await AppService.createCurrency(formData)
             console.log("data is: ",data)
+            handleModalClose()
             if(status === 201) {
+
                 toast.success("ارز شما با موفقیت ساخته شد")
             }else {
+
                 toast.error("خطا در ثبت اطلاعات ! مجددا تلاش کنید")
             }
         }
@@ -52,10 +56,10 @@ const CreateCurrencyForm = () => {
                 margin="normal"
                 required
                 fullWidth
-                name="creator_email"
+                name="author_email"
                 label="ایمیل"
                 type="email"
-                id="creator_email"
+                id="author_email"
             />
             <TextField
                 onChange={handleFormData}
