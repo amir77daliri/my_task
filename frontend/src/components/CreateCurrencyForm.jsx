@@ -25,14 +25,14 @@ const CreateCurrencyForm = ({handleModalClose}) => {
             console.log("data is: ",data)
             handleModalClose()
             if(status === 201) {
-
-                toast.success("ارز شما با موفقیت ساخته شد")
-            }else {
-                toast.error(`ارز با نام ${data.msg} در پایگاه داده موجود است! `)
+                return toast.success("ارز شما با موفقیت ساخته شد")
             }
         }
         catch (err) {
-            console.log(err)
+            handleModalClose()
+            if (err.response.status === 400) {
+                toast.error(`ارز با نام ${formData.currency_name} در پایگاه داده موجود است! `)
+            }
         }
     };
 
