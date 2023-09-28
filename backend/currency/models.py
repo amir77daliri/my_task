@@ -1,3 +1,12 @@
 from django.db import models
 
-# Create your models here.
+
+class Currency(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.IntegerField(default=10000)
+    author_email = models.EmailField()
+    content = models.TextField()
+    change_price = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
