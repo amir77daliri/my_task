@@ -1,24 +1,41 @@
 import './App.css';
+import {useState} from "react";
+import MainLayout from "./layouts/MainLayout";
+import Sidebar from "./components/Sidebar";
+import ContentContainer from "./components/ContentContainer";
+import TabPanel from "./components/tabs/TabPanel";
+
+import CurrencyTable from "./components/CurrencyTable";
+import CurrencyModal from "./components/CurrencyModal";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [value, setValue] = useState(0)
+    const [open, setOpen] = useState(false)
+
+    const handleModalOpen = () => setOpen(true);
+    const handleModalClose = () => {
+        setOpen(false);
+        setValue(0)
+    }
+
+    const handleChangePage = (event, newValue) => {
+        setValue(newValue)
+    }
+
+    return (
+        <MainLayout>
+            <Sidebar value={value} handleChange={handleChangePage}/>
+            <ContentContainer>
+                <TabPanel value={value} index={0} >
+                    <CurrencyTable />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <CurrencyModal open={open} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose}/>
+                </TabPanel>
+            </ContentContainer>
+        </MainLayout>
+    );
 }
 
 export default App;
