@@ -1,3 +1,4 @@
+import {useState, useEffect, useMemo} from 'react'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,6 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Box, Divider, Typography} from "@mui/material";
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,20 +44,38 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-function createData(name, price,rial,daily) {
-  return { name, price, rial, daily };
+function createData(name, price,max,change, img) {
+  return { name, price, max, change, img };
 }
 
 const rows = [
-  createData('بیت کوین', '26,876,34$', '1,342,916,846', '2.3%+'),
-  createData('اتریوم', '6,876,34$', '42,916,846', '1.3%-'),
-  createData('تتر', '876,34$', '2,576,846', '1.3%-'),
-  createData('بی ان بی', '76,34$', '916,846', '0.3%+')
+  createData('دلار آمریکا', '49.500', '50,000', '2.3%+', "../assets/logos/usa.png"),
+  createData('یورو', '55,940', '60,200', '1.3%-', "../assets/logos/euro.png"),
+  createData('درهم امارات', '137,600', '138,200', '1.3%-', "../assets/logos/UAE.png"),
+  createData('پوند', '60,130', '62,876', '0.3%+', "../assets/logos/britain.png")
 ];
 
-const CurrencyTable = () => {
+const CurrencyTable = ({currencies, setCurrencies}) => {
+  let socket;
+
+  useEffect(() => {
+    socket = new WebSocket('ws://localhost:8000/ws/currency/')
+    socket.onopen = function (e) {
+      console.log("websocket connected successfully")
+    }
+    socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            setCurrencies(data)
+        };
+    socket.onclose = function(e) {
+            console.log('Chat socket closed unexpectedly');
+        };
+
+  }, [])
+
   return (
     <Box sx={{textAlign: "center"}}>
+
       <Typography>
         نمایش لحظه ای ارزها
       </Typography>
@@ -65,7 +86,7 @@ const CurrencyTable = () => {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow >
-            <StyledCustomTableCell colSpan={5}>ارزها</StyledCustomTableCell>
+            <StyledCustomTableCell colSpan={5}>ارزهای دیجیتال</StyledCustomTableCell>
           </TableRow>
           <TableRow>
             <StyledTableCell> ------- </StyledTableCell>
@@ -76,17 +97,25 @@ const CurrencyTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell align="left">لوگو</StyledTableCell>
+          {currencies.length > 0 ? (currencies.map((currency) => (
+            <StyledTableRow key={currency.name}>
+              <StyledTableCell align="left"> <MonetizationOnIcon /> </StyledTableCell>
               <StyledTableCell component="th" scope="row">
-                {row.name}
+                {currency.name}
               </StyledTableCell>
-              <StyledTableCell align="left">{row.price}</StyledTableCell>
-              <StyledTableCell align="left">{row.rial}</StyledTableCell>
-              <StyledTableCell align="left">{row.daily}</StyledTableCell>
+              <StyledTableCell align="left" sx={{color: 'green'}} >{`${currency.price} $` }</StyledTableCell>
+              <StyledTableCell align="left" sx={{color: 'red'}} >{`${currency.price * 48} تومان ` }</StyledTableCell>
+              <StyledTableCell align="left">{`${currency.content} ` }</StyledTableCell>
             </StyledTableRow>
-          ))}
+          ))) : (
+            <StyledTableRow >
+              <StyledTableCell align="left"><MonetizationOnIcon /></StyledTableCell>
+              <StyledTableCell align="left">------</StyledTableCell>
+              <StyledTableCell align="left">------</StyledTableCell>
+              <StyledTableCell align="left">------</StyledTableCell>
+              <StyledTableCell align="left">------</StyledTableCell>
+            </StyledTableRow>
+          )}
         </TableBody>
       </Table>
 
@@ -102,26 +131,24 @@ const CurrencyTable = () => {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow >
-            <StyledCustomTableCell colSpan={5}>ارزهای دیجیتال</StyledCustomTableCell>
+            <StyledCustomTableCell colSpan={5}>ارزهای </StyledCustomTableCell>
           </TableRow>
           <TableRow>
-            <StyledTableCell> ------- </StyledTableCell>
             <StyledTableCell align="left">نام ارز</StyledTableCell>
             <StyledTableCell align="left">قیمت </StyledTableCell>
-            <StyledTableCell align="left">قیمت ریالی ;</StyledTableCell>
+            <StyledTableCell align="left">قیمت ریالی </StyledTableCell>
             <StyledTableCell align="left"> روزانه</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <StyledTableRow key={row.name}>
-              <StyledTableCell align="left">لوگو</StyledTableCell>
               <StyledTableCell component="th" scope="row">
                 {row.name}
               </StyledTableCell>
               <StyledTableCell align="left">{row.price}</StyledTableCell>
-              <StyledTableCell align="left">{row.rial}</StyledTableCell>
-              <StyledTableCell align="left">{row.daily}</StyledTableCell>
+              <StyledTableCell align="left">{row.max}</StyledTableCell>
+              <StyledTableCell align="left" sx={{color: row.change.includes("+") ? "green" : "red"}}>{row.change}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

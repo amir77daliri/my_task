@@ -1,16 +1,24 @@
+# mysite/asgi.py
 import os
 
+from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 
-from currency.routing import websocket_urlpatterns
+from currency.routing import websocket_urlpatterns as c_web
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+# Initialize Django ASGI application early to ensure the AppRegistry
+# is populated before importing code that may import ORM models.
+django_asgi_app = get_asgi_application()
+
 
 application = ProtocolTypeRouter(
     {
-        "http": get_asgi_application(),
-        # Just HTTP for now. (We can add other protocols later.)
-        "websocket": URLRouter(websocket_urlpatterns)
+        "http": django_asgi_app,
+        "websocket": AllowedHostsOriginValidator(
+            AuthMiddlewareStack(URLRouter([*c_web]))
+        ),
     }
 )

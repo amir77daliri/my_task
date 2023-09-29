@@ -13,7 +13,7 @@ import {ToastContainer} from "react-toastify";
 function App() {
     const [value, setValue] = useState(0)
     const [open, setOpen] = useState(false)
-
+    const [currencies, setCurrencies] = useState([])
     const handleModalOpen = () => setOpen(true);
     const handleModalClose = () => {
         setOpen(false);
@@ -30,7 +30,7 @@ function App() {
             <Sidebar value={value} handleChange={handleChangePage}/>
             <ContentContainer>
                 <TabPanel value={value} index={0} >
-                    <CurrencyTable />
+                    <CurrencyTable currencies={currencies} setCurrencies={setCurrencies}/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <CurrencyModal open={open} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose}/>

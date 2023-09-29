@@ -3,19 +3,16 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Currency
+from .serializers import InputCurrencyDataSerializer
 
 
 class CreateCurrency(APIView):
     """
         API View to Create currency -- data come from react app
     """
-    class InputSerializer(serializers.Serializer):
-        currency_name = serializers.CharField(max_length=100)
-        content = serializers.CharField(max_length=10000)
-        author_email = serializers.EmailField()
 
     def post(self, request):
-        obj_data = self.InputSerializer(data=request.data)
+        obj_data = InputCurrencyDataSerializer(data=request.data)
         obj_data.is_valid(raise_exception=True)
         try:
             Currency.objects.create(
