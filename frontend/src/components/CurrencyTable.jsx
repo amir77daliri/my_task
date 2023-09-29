@@ -1,4 +1,4 @@
-import {useState, useEffect, useMemo} from 'react'
+import {useEffect} from 'react'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -44,15 +44,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-function createData(name, price,max,change, img) {
-  return { name, price, max, change, img };
+function createData(name, price,max,change) {
+  return { name, price, max, change };
 }
 
 const rows = [
-  createData('دلار آمریکا', '49.500', '50,000', '2.3%+', "../assets/logos/usa.png"),
-  createData('یورو', '55,940', '60,200', '1.3%-', "../assets/logos/euro.png"),
-  createData('درهم امارات', '137,600', '138,200', '1.3%-', "../assets/logos/UAE.png"),
-  createData('پوند', '60,130', '62,876', '0.3%+', "../assets/logos/britain.png")
+  createData('دلار آمریکا', '49.500', '50,000', '2.3%+'),
+  createData('یورو', '55,940', '60,200', '1.3%-'),
+  createData('درهم امارات', '137,600', '138,200', '1.3%-'),
+  createData('پوند', '60,130', '62,876', '0.3%+')
 ];
 
 const CurrencyTable = ({currencies, setCurrencies}) => {
@@ -77,7 +77,7 @@ const CurrencyTable = ({currencies, setCurrencies}) => {
     <Box sx={{textAlign: "center"}}>
 
       <Typography>
-        نمایش لحظه ای ارزها
+        نمایش لحظه ای قیمت ارزها
       </Typography>
       <Divider color="red" sx={{ mb: 2, mt: 1}}/>
 
@@ -104,7 +104,7 @@ const CurrencyTable = ({currencies, setCurrencies}) => {
                 {currency.name}
               </StyledTableCell>
               <StyledTableCell align="left" sx={{color: 'green'}} >{`${currency.price} $` }</StyledTableCell>
-              <StyledTableCell align="left" sx={{color: 'red'}} >{`${currency.price * 48} تومان ` }</StyledTableCell>
+              <StyledTableCell align="left" sx={{color: 'red'}} >{`${currency.price * 48} ریا ل ` }</StyledTableCell>
               <StyledTableCell align="left">{`${currency.content} ` }</StyledTableCell>
             </StyledTableRow>
           ))) : (
@@ -118,25 +118,22 @@ const CurrencyTable = ({currencies, setCurrencies}) => {
           )}
         </TableBody>
       </Table>
-
-        {/* Second Table -*/}
-
     </TableContainer>
 
-      <Divider variant="middle" sx={{mt:3, mb: 2}} color="grey"/>
+    <Divider variant="middle" sx={{mt:3, mb: 2}} color="grey"/>
 
-      {/* Second Table -*/}
+    {/* Second Table -*/}
 
-      <TableContainer component={Paper}>
+    <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow >
-            <StyledCustomTableCell colSpan={5}>ارزهای </StyledCustomTableCell>
+            <StyledCustomTableCell colSpan={5}>ارزهای اصلی</StyledCustomTableCell>
           </TableRow>
           <TableRow>
             <StyledTableCell align="left">نام ارز</StyledTableCell>
             <StyledTableCell align="left">قیمت </StyledTableCell>
-            <StyledTableCell align="left">قیمت ریالی </StyledTableCell>
+            <StyledTableCell align="left">بیشترین قیمت</StyledTableCell>
             <StyledTableCell align="left"> روزانه</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -153,9 +150,6 @@ const CurrencyTable = ({currencies, setCurrencies}) => {
           ))}
         </TableBody>
       </Table>
-
-        {/* Second Table -*/}
-
     </TableContainer>
     </Box>
   );

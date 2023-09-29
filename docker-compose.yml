@@ -1,0 +1,91 @@
+version: '3'
+
+services:
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  
+  django_app:
+    build: 
+      context: .
+      dockerfile: backend/Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    volumes:
+      - type: 'bind'
+        source: './backend'
+        target: '/app'
+    depends_on:
+      - db
+      - redis
+
+  migrations:
+    build: 
+      context: .
+      dockerfile: backend/Dockerfile
+    command: python manage.py migrate
+    volumes:
+      - type: 'bind'
+        source: './backend'
+        target: '/app'
+    depends_on:
+      - db
+      - redis
+
+  celery_worker:
+    build: 
+      context: .
+      dockerfile: backend/Dockerfile
+    command: celery -A config worker -l info
+    volumes:
+      - type: 'bind'
+        source: './backend'
+        target: '/app'
+    depends_on:
+      - db
+      - redis
+      - migrations
+
+  celery_beat:
+    build: 
+      context: .
+      dockerfile: backend/Dockerfile
+    command: celery -A config beat -l info
+    volumes:
+      - type: 'bind'
+        source: './backend'
+        target: '/app'
+    depends_on:
+      - db
+      - redis
+      - migrations
+  
+  react:
+    build: 
+      context: .
+      dockerfile: frontend/Dockerfile
+    volumes:
+      - type: 'bind'
+        source: './frontend'
+        target: '/ract_app'
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+      - redis
+      - django_app
+      - celery_beat
+      - celery_worker
+      - migrations
