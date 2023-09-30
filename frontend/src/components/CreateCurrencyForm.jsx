@@ -24,15 +24,14 @@ const CreateCurrencyForm = ({handleModalClose}) => {
             const {data, status} = await AppService.createCurrency(formData)
             console.log("data is: ",data)
             handleModalClose()
+
             if(status === 201) {
                 return toast.success("ارز شما با موفقیت ساخته شد")
             }
         }
         catch (err) {
             handleModalClose()
-            if (err.response.status === 400) {
-                toast.error(`ارز با نام ${formData.currency_name} در پایگاه داده موجود است! `)
-            }
+            toast.error(`ارز با نام ${formData.currency_name} در پایگاه داده موجود است! `)
         }
     };
 

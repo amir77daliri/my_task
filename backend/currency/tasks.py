@@ -37,7 +37,7 @@ def change_random_price():
 
     # send data to channel group  :
     serialized_data = OutputCurrencyDataSerializer(all_currencies, many=True).data
-    print(serialized_data)
+    
     async_to_sync(channel_layer.group_send)(
         "take_currencies_group",
         {

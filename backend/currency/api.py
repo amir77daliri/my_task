@@ -10,7 +10,6 @@ class CreateCurrency(APIView):
     """
         API View to Create currency -- data come from react app
     """
-
     def post(self, request):
         obj_data = InputCurrencyDataSerializer(data=request.data)
         obj_data.is_valid(raise_exception=True)
