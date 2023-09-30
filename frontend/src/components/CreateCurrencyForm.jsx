@@ -31,7 +31,9 @@ const CreateCurrencyForm = ({handleModalClose}) => {
         }
         catch (err) {
             handleModalClose()
-            toast.error(`ارز با نام ${formData.currency_name} در پایگاه داده موجود است! `)
+            if(err.response.status === 400) {
+                toast.console.error(`ارز با نام ${formData.currency_name} در پاگاه داده موجود است`);
+            }
         }
     };
 
